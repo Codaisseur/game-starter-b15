@@ -14,6 +14,9 @@ It has these endpoints:
 
 ## Running
 
-You need a working Postgres database that is preferrably empty (drop all the tables). Run the app with `yarn start`. 
+* You need a working Postgres database that is preferrably empty (drop all the tables) and running 
+* Install the dependencies using `yarn install`
+* Compile the app (Typescript > Javascript) using `yarn compile` (during development you can use `yarn watch`)
+* `yarn start`
 
-You can run the tests with `yarn test`.
+You can run the tests with `yarn test`. Currently they only cover the game logic. 
