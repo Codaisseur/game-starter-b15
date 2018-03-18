@@ -6,6 +6,7 @@ import GamesList from './components/games/GamesList'
 import GameDetails from './components/games/GameDetails'
 import LogoutPage from './components/logout/LogoutPage'
 import './App.css'
+import TopBar from './components/layout/TopBar'
 
 // <Route exact path="/signup" component={SignupPage} />
 // <Route exact path="/games" component={GamesList} />
@@ -16,6 +17,7 @@ class App extends Component {
     return (
       <Router>
         <div>
+          <TopBar />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/logout" component={LogoutPage} />
           <Route exact path="/signup" component={SignupPage} />

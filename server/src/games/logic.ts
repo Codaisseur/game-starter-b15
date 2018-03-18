@@ -46,3 +46,9 @@ export const calculateWinner = (board: Board): Symbol | null =>
     )
     .filter(row => row[0] && row.every(symbol => symbol === row[0]))
     .map(row => row[0])[0] || null
+
+export const finished = (board: Board): boolean =>
+  board
+    .reduce((a,b) => a.concat(b) as Row)
+    .filter(symbol => symbol === null)
+    .length === 0

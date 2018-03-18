@@ -4,7 +4,7 @@ import {
 } from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player, Board } from './entities'
-import {IsBoard, isValidTransition, calculateWinner} from './logic'
+import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
 import { Validate } from 'class-validator'
 import {io} from '../index'
 
@@ -95,6 +95,10 @@ export default class GameController {
 
     const winner = calculateWinner(update.board)
     if (winner) {
+      game.winner = winner
+      game.status = 'finished'
+    }
+    else if (finished(update.board)) {
       game.status = 'finished'
     }
     else {

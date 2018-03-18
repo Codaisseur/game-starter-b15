@@ -1,6 +1,6 @@
 import 'mocha'
 import { equal } from 'assert'
-import { calculateWinner, isValidTransition } from './logic'
+import { calculateWinner, isValidTransition, finished } from './logic'
 import { Board } from './entities'
 
 describe('calculateWinner()', () => {
@@ -130,5 +130,26 @@ describe('isValidTransition()', () => {
       [null, 'o', 'o'],
     ]
     equal(isValidTransition('o', from, to), false)
+  })
+})
+
+describe('finished()', () => {
+
+  it('should finish when there are no moves left', () => {
+    const board: Board = [
+      ['o', 'o', 'x'],
+      ['x', 'x', 'o'],
+      ['x', 'o', 'o'],
+    ]
+    equal(finished(board), true)
+  })
+
+  it('should not finish when there are moves left', () => {
+    const board: Board = [
+      ['o', null, 'x'],
+      [null, null, 'o'],
+      ['x', 'o', 'o'],
+    ]
+    equal(finished(board), false)
   })
 })

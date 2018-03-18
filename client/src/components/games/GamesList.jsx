@@ -3,6 +3,12 @@ import {getGames, createGame} from '../../actions/games'
 import {getUsers} from '../../actions/users'
 import {connect} from 'react-redux'
 import {Redirect, Link} from 'react-router-dom'
+import Button from 'material-ui/Button'
+import Paper from 'material-ui/Paper'
+import Card, { CardActions, CardContent } from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
+import {withRouter} from 'react-router'
+import './GamesList.css'
 
 class GamesList extends PureComponent {
   componentWillMount() {
@@ -13,13 +19,34 @@ class GamesList extends PureComponent {
   }
 
   renderGame = (game) => {
-    const {users} = this.props
+    const {users, history} = this.props
 
-    return (<div key={game.id}>
-      <Link to={`/games/${game.id}`}><h4>Game #{game.id}</h4></Link>
-      No. of players: {game.players.length}
-      {game.players.map(player => users[player.userId].firstName).join(' + ')}
-    </div>)
+    return (<Card key={game.id} className="game-card">
+      <CardContent>
+        <Typography color="textSecondary">
+          This game is played by&nbsp;
+          {
+            game.players
+              .map(player => users[player.userId].firstName)
+              .join(' and ')
+          }
+        </Typography>
+        <Typography variant="headline" component="h2">
+          Game #{game.id}
+        </Typography>
+        <Typography color="textSecondary">
+          Status: {game.status}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          onClick={() => history.push(`/games/${game.id}`)}
+        >
+          Watch
+        </Button>
+      </CardActions>
+    </Card>)
   }
 
   render() {
@@ -31,11 +58,20 @@ class GamesList extends PureComponent {
 
     if (games === null || users === null) return null
 
-    return (<div>
-      <button onClick={createGame}>Create Game</button>
+    return (<Paper class="outer-paper">
+      <Button
+        color="primary"
+        variant="raised"
+        onClick={createGame}
+        className="create-game"
+      >
+        Create Game
+      </Button>
 
-      {games.map(game => this.renderGame(game))}
-    </div>)
+      <div>
+        {games.map(game => this.renderGame(game))}
+      </div>
+    </Paper>)
   }
 }
 
@@ -46,4 +82,6 @@ const mapStateToProps = state => ({
     null : Object.values(state.games).sort((a, b) => b.id - a.id)
 })
 
-export default connect(mapStateToProps, {getGames, getUsers, createGame})(GamesList)
+export default withRouter(
+  connect(mapStateToProps, {getGames, getUsers, createGame})(GamesList)
+)
