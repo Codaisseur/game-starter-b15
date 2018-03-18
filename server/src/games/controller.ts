@@ -6,6 +6,7 @@ import User from '../users/entity'
 import { Game, Player, Board } from './entities'
 import {IsBoard, isValidTransition, calculateWinner} from './logic'
 import { Validate } from 'class-validator'
+import {io} from '../index'
 
 class GameUpdate {
 
@@ -24,17 +25,22 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
-    const game = await Game.create().save()
+    const entity = await Game.create().save()
 
     await Player.create({
-      game, 
+      game: entity, 
       user,
       symbol: 'x'
     }).save()
 
-    // send add game via SocketIO
+    const game = await Game.findOneById(entity.id)
 
-    return Game.findOneById(game.id)
+    io.emit('action', {
+      type: 'ADD_GAME',
+      payload: game
+    })
+
+    return game
   }
 
   @Authorized()
@@ -48,15 +54,19 @@ export default class GameController {
     if (!game) throw new BadRequestError(`Game does not exist`)
     if (game.status !== 'pending') throw new BadRequestError(`Game is already started`)
 
+    game.status = 'started'
+    await game.save()
+
     const player = await Player.create({
       game, 
       user,
       symbol: 'o'
     }).save()
 
-    game.status = 'started'
-    await game.save()
-    // send game update via SocketIO
+    io.emit('action', {
+      type: 'UPDATE_GAME',
+      payload: await Game.findOneById(game.id)
+    })
 
     return player
   }
@@ -92,16 +102,27 @@ export default class GameController {
     }
     game.board = update.board
     await game.save()
-    // send game update via SocketIO
+    
+    io.emit('action', {
+      type: 'UPDATE_GAME',
+      payload: game
+    })
 
     return game
   }
 
+  @Authorized()
   @Get('/games/:id([0-9]+)')
   getGame(
     @Param('id') id: number
   ) {
     return Game.findOneById(id)
+  }
+
+  @Authorized()
+  @Get('/games')
+  getGames() {
+    return Game.find()
   }
 }
 
