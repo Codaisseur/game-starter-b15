@@ -24,14 +24,15 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
-    const game = new Game()
-    await game.save()
+    const game = await Game.create().save()
 
     await Player.create({
       game, 
       user,
       symbol: 'x'
     }).save()
+
+    // send add game via SocketIO
 
     return Game.findOneById(game.id)
   }
@@ -55,6 +56,7 @@ export default class GameController {
 
     game.status = 'started'
     await game.save()
+    // send game update via SocketIO
 
     return player
   }
@@ -89,8 +91,10 @@ export default class GameController {
       game.turn = player.symbol === 'x' ? 'o' : 'x'
     }
     game.board = update.board
+    await game.save()
+    // send game update via SocketIO
 
-    return game.save()
+    return game
   }
 
   @Get('/games/:id([0-9]+)')

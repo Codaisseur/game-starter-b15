@@ -1,5 +1,5 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
-import { Board, Symbol } from './entities';
+import { Board, Symbol, Row } from './entities';
 
 @ValidatorConstraint()
 export class IsBoard implements ValidatorConstraintInterface {
@@ -14,44 +14,35 @@ export class IsBoard implements ValidatorConstraintInterface {
   }
 }
 
-export const isValidTransition = (playerSymbol: Symbol, from: Board, to: Board) =>
-  from
-    .map((row, rowIndex) =>
-      row.filter(
-        (oldSymbol, columnIndex) => {
-          const newSymbol = to[rowIndex][columnIndex]
-          return oldSymbol !== newSymbol &&
-            // location was empty before
-            oldSymbol === null &&
-            // new symbol is current turn
-            newSymbol === playerSymbol
-        }        
-      )
+export const isValidTransition = (playerSymbol: Symbol, from: Board, to: Board) => {
+  const changes = from
+    .map(
+      (row, rowIndex) => row.map((symbol, columnIndex) => ({
+        from: symbol, 
+        to: to[rowIndex][columnIndex]
+      }))
     )
-    // allow 1 move, and 1 move only
-    .filter(row => row.length === 1).length === 1
+    .reduce((a,b) => a.concat(b))
+    .filter(change => change.from !== change.to)
+
+  return changes.length === 1 && 
+    changes[0].to === playerSymbol && 
+    changes[0].from === null
+}
 
 export const calculateWinner = (board: Board): Symbol | null =>
-  // horizontal winner
   board
+    .concat(
+      // vertical winner
+      [0, 1, 2].map(n => board.map(row => row[n])) as Row[]
+    )
+    .concat(
+      [
+        // diagonal winner ltr
+        [0, 1, 2].map(n => board[n][n]),
+        // diagonal winner rtl
+        [0, 1, 2].map(n => board[2-n][n])
+      ] as Row[]
+    )
     .filter(row => row[0] && row.every(symbol => symbol === row[0]))
-    .map(row => row[0])[0] ||
-
-  // vertical winner
-  board[0]
-    .map((_, index) => board.map(row => row[index]))
-    .filter(row => row[0] && row.every(symbol => symbol === row[0]))
-    .map(row => row[0])[0] || 
-  
-  // diagonal winner ltr
-  [0, 1, 2]
-    .map(n => board[n][n])
-    .filter((symbol, _, all) => symbol == all[0])[2] ||
-
-  // diagonal winner rtl
-  [2, 1, 0]
-    .map(n => board[n][2-n])
-    .filter((symbol, _, all) => symbol == all[0])[2] || 
-  
-  null
-  
+    .map(row => row[0])[0] || null

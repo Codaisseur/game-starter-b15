@@ -11,3 +11,9 @@ It has these endpoints:
 * `PATCH /games/:id`: update an existing game
 * `GET /games`: list all games
 * `GET /users`: list all users
+
+## Running
+
+You need a working Postgres database that is preferrably empty (drop all the tables). Run the app with `yarn start`. 
+
+You can run the tests with `yarn test`.

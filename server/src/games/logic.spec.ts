@@ -49,6 +49,15 @@ describe('calculateWinner()', () => {
     ]
     equal(calculateWinner(board), null)
   })
+
+  it('should work when the board is empty', () => {
+    const board: Board = [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ]
+    equal(calculateWinner(board), null)
+  })
 })
 
 describe('isValidTransition()', () => {
@@ -107,5 +116,19 @@ describe('isValidTransition()', () => {
       ['x', 'o', 'o'],
     ]
     equal(isValidTransition('x', from, to), false)
+  })
+
+  it('should not allow to do more than 1 change even if 1 is valid', () => {
+    const from: Board = [
+      ['o', null, null],
+      [null, 'x', 'o'],
+      ['x', 'o', 'o'],
+    ]
+    const to: Board = [
+      ['o', null, 'o'],
+      [null, 'x', 'o'],
+      [null, 'o', 'o'],
+    ]
+    equal(isValidTransition('o', from, to), false)
   })
 })

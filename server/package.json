@@ -1,11 +1,13 @@
 {
-  "name": "server",
+  "name": "game-starter-b15-server",
   "version": "1.0.0",
   "main": "target/index.js",
   "license": "private",
   "scripts": {
     "start": "node .",
-    "test": "node_modules/.bin/mocha --require ts-node/register src/**/*.spec.ts"
+    "test": "node_modules/.bin/mocha --require ts-node/register src/**/*.spec.ts",
+    "watch": "node_modules/.bin/tsc -w",
+    "compile": "node_modules/.bin/tsc -p ."
   },
   "dependencies": {
     "@types/bcrypt": "^1.0.0",
@@ -25,6 +27,7 @@
     "pg": "^7.4.1",
     "routing-controllers": "^0.7.7",
     "ts-node": "^5.0.1",
-    "typeorm": "^0.1.16"
+    "typeorm": "^0.1.16",
+    "typescript": "^2.7.2"
   }
 }
