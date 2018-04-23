@@ -50,5 +50,4 @@ export const calculateWinner = (board: Board): Symbol | null =>
 export const finished = (board: Board): boolean =>
   board
     .reduce((a,b) => a.concat(b) as Row)
-    .filter(symbol => symbol === null)
-    .length === 0
+    .every(symbol => symbol !== null)

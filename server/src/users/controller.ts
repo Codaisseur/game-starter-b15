@@ -1,17 +1,26 @@
 import { JsonController, Post, Param, Get, Body, Authorized } from 'routing-controllers'
 import User from './entity';
+import { io } from '../index'
 
 @JsonController()
 export default class UserController {
 
   @Post('/users')
   async signup(
-    @Body() user: User
+    @Body() data: User
   ) {
-    const {password, ...rest} = user
+    const {password, ...rest} = data
     const entity = User.create(rest)
     await entity.setPassword(password)
-    return entity.save()
+
+    const user = await entity.save()
+
+    io.emit('action', {
+      type: 'ADD_USER',
+      payload: entity
+    })
+
+    return user
   }
 
   @Authorized()
