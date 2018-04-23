@@ -93,6 +93,8 @@ export default class GameController {
       throw new BadRequestError(`Invalid move`)
     }    
 
+    console.log('2')
+
     const winner = calculateWinner(update.board)
     if (winner) {
       game.winner = winner
@@ -106,6 +108,8 @@ export default class GameController {
     }
     game.board = update.board
     await game.save()
+
+    console.log('3')
     
     io.emit('action', {
       type: 'UPDATE_GAME',

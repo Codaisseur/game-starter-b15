@@ -2,12 +2,11 @@ import React, {PureComponent} from 'react'
 import {getGames, createGame} from '../../actions/games'
 import {getUsers} from '../../actions/users'
 import {connect} from 'react-redux'
-import {Redirect, Link} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
 import Card, { CardActions, CardContent } from 'material-ui/Card'
 import Typography from 'material-ui/Typography'
-import {withRouter} from 'react-router'
 import './GamesList.css'
 
 class GamesList extends PureComponent {
@@ -58,7 +57,7 @@ class GamesList extends PureComponent {
 
     if (games === null || users === null) return null
 
-    return (<Paper class="outer-paper">
+    return (<Paper className="outer-paper">
       <Button
         color="primary"
         variant="raised"
@@ -82,6 +81,4 @@ const mapStateToProps = state => ({
     null : Object.values(state.games).sort((a, b) => b.id - a.id)
 })
 
-export default withRouter(
-  connect(mapStateToProps, {getGames, getUsers, createGame})(GamesList)
-)
+export default connect(mapStateToProps, {getGames, getUsers, createGame})(GamesList)

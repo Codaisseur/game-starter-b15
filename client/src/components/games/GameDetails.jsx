@@ -4,8 +4,8 @@ import {Redirect} from 'react-router-dom'
 import {getGames, joinGame, updateGame} from '../../actions/games'
 import {getUsers} from '../../actions/users'
 import {userId} from '../../jwt'
-import Button from 'material-ui/Button'
 import Paper from 'material-ui/Paper'
+import Board from './Board'
 import './GameDetails.css'
 
 class GameDetails extends PureComponent {
@@ -31,21 +31,7 @@ class GameDetails extends PureComponent {
     updateGame(game.id, board)
   }
 
-  renderCel = (rowIndex, cellIndex, symbol, hasTurn) => {
-    return (
-      <button
-        disabled={hasTurn}
-        onClick={() => this.makeMove(rowIndex, cellIndex)}
-        key={`${rowIndex}-${cellIndex}`}
-      >{symbol || '-'}</button>
-    )
-  }
 
-  renderRow = (cells, rowIndex) => {
-    return (<div key={rowIndex}>
-      {cells.map((symbol, cellIndex) => this.renderCel(rowIndex, cellIndex,symbol,false))}
-    </div>)
-  }
 
   render() {
     const {game, users, authenticated, userId} = this.props
@@ -59,13 +45,17 @@ class GameDetails extends PureComponent {
 
     const player = game.players.find(p => p.userId === userId)
 
-    return (<Paper class="outer-paper">
+    const winner = game.players
+      .filter(p => p.symbol === game.winner)
+      .map(p => p.userId)[0]
+
+    return (<Paper className="outer-paper">
       <h1>Game #{game.id}</h1>
 
       <p>Status: {game.status}</p>
 
       {
-        game.status === 'started' && 
+        game.status === 'started' &&
         player && player.symbol === game.turn &&
         <div>It's your turn!</div>
       }
@@ -76,9 +66,17 @@ class GameDetails extends PureComponent {
         <button onClick={this.joinGame}>Join Game</button>
       }
 
+      {
+        winner &&
+        <p>Winner: {users[winner].firstName}</p>
+      }
+
       <hr />
 
-      {game.board.map(this.renderRow)}
+      {
+        game.status !== 'pending' &&
+        <Board board={game.board} makeMove={this.makeMove} />
+      }
     </Paper>)
   }
 }
