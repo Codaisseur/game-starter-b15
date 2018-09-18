@@ -39,9 +39,9 @@ export const calculateWinner = (board: Board): Symbol | null =>
     .concat(
       [
         // diagonal winner ltr
-        [0, 1, 2, 3, 4, 5].map(n => board[n][n]),
+        [0, 1, 2].map(n => board[n][n]),
         // diagonal winner rtl
-        [0, 1, 2, 3, 4, 5].map(n => board[2-n][n])
+        [0, 1, 2].map(n => board[2-n][n])
       ] as Row[]
     )
     .filter(row => row[0] && row.every(symbol => symbol === row[0]))
