@@ -9,6 +9,10 @@ import Board from './Board'
 import './GameDetails.css'
 
 class GameDetails extends PureComponent {
+  state = {
+    rowIndex: 0,
+    cellIndex: 0
+  }
 
   componentWillMount() {
     if (this.props.authenticated) {
@@ -19,7 +23,7 @@ class GameDetails extends PureComponent {
 
   joinGame = () => this.props.joinGame(this.props.game.id)
 
-  makeMove = (toRow, toCell) => {
+  makeMove3 = (toRow, toCell) => {
     const {game, updateGame} = this.props
 
     const board = game.board.map(
@@ -28,7 +32,26 @@ class GameDetails extends PureComponent {
         else return cell
       })
     )
-    updateGame(game.id, board)
+    console.log(this.state)
+  }
+
+  makeMove2 = (toRow, toCell) => {
+    this.setState({
+      rowIndex: toRow, 
+      cellIndex: toCell
+    }, function() { this.makeMove3(this.state.rowIndex, this.state.cellIndex) }
+    )
+  }
+
+  makeMove = (toRow, toCell) => {
+    const {game, updateGame} = this.props
+
+    const board = game.board.map(
+      (row, rowIndex) => row.map((cell, cellIndex) => {
+        if (rowIndex === toRow && cellIndex === toCell && cell === game.turn) return this.makeMove2(toRow, toCell)
+        else return cell
+      })
+    )
   }
 
 
@@ -75,7 +98,7 @@ class GameDetails extends PureComponent {
 
       {
         game.status !== 'pending' &&
-        <Board board={game.board} makeMove={this.makeMove} />
+        <Board object={this.state} board={game.board} makeMove={this.makeMove} makeMove3={this.makeMove3}/>
       }
     </Paper>)
   }
