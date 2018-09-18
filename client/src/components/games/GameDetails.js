@@ -27,14 +27,13 @@ class GameDetails extends PureComponent {
     const {game} = this.props
     if (game.board[toRow][toCell] === null) {
       return 
-    } else if (game.board[toRow][toCell] != game.turn) {
+    } else if (game.board[toRow][toCell] !== game.turn) {
       return
-    } else if (game.board[toRow][toCell] == game.turn)
+    } else if (game.board[toRow][toCell] === game.turn)
     return this.setState({
       theRow: toRow, 
       theCell: toCell
-    }),
-    console.log(this.state)
+    })
   }
 
   makeMove = (toRow, toCell) => {
@@ -53,7 +52,15 @@ class GameDetails extends PureComponent {
     this.setState({
       theRow: 0, 
       theCell: 0
-    })} else {
+    }) 
+    if ((game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn)
+      || (game.board[toRow][toCell-1] != undefined && game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn)
+      || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
+      || (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn)
+      ){
+      console.log('Fire?')
+    }
+  } else {
       return console.log('Cant move a unit there')
     }
   }
