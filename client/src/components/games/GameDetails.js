@@ -22,27 +22,15 @@ class GameDetails extends PureComponent {
   }
 
   joinGame = () => this.props.joinGame(this.props.game.id)
- 
-  // makeMove = (toRow, toCell) => {
-  //   const {game, updateGame} = this.props
-    
-  //   const board = game.board.map(
-  //     (row, rowIndex) => row.map((cell, cellIndex) => {
-  //       if (rowIndex === toRow && cellIndex === toCell && cell === game.turn) return game.turn
-  //       else return cell
-  //     })
-  //     )
-  //     this.makeMove2(toRow, toCell)
-  //   }
   
-  makeMove = (toRow, toCell) => {
+  selectUnit = (toRow, toCell) => {
     return this.setState({
       theRow: toRow, 
       theCell: toCell
     })
   }
 
-    makeMove3 = (toRow, toCell) => {
+    makeMove = (toRow, toCell) => {
       const {game, updateGame} = this.props
   
       const board = game.board.map(
@@ -100,7 +88,7 @@ class GameDetails extends PureComponent {
 
       {
         game.status !== 'pending' &&
-        <Board board={game.board} makeMove={this.makeMove} theState={this.state} makeMove3={this.makeMove3}/>
+        <Board board={game.board} selectUnit={this.selectUnit} theState={this.state} makeMove={this.makeMove}/>
       }
     </Paper>)
   }

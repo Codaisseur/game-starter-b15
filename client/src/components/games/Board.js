@@ -2,15 +2,15 @@ import React from 'react'
 import './Board.css'
 
 
-const renderCel = (makeMove, rowIndex, cellIndex, symbol, hasTurn, theState, makeMove3) => {
+const renderCel = (selectUnit, rowIndex, cellIndex, symbol, hasTurn, theState, makeMove) => {
   return (
     <button
       className="board-tile"
       disabled={hasTurn}
       onClick={() => {
         if (theState.theRow < 1){
-        return makeMove(rowIndex, cellIndex) } else {
-        return makeMove3(rowIndex, cellIndex)
+        return selectUnit(rowIndex, cellIndex) } else {
+        return makeMove(rowIndex, cellIndex)
         }
       }
       } 
@@ -19,8 +19,8 @@ const renderCel = (makeMove, rowIndex, cellIndex, symbol, hasTurn, theState, mak
   )
 }
 
-export default ({board, makeMove, theState, makeMove3}) => board.map((cells, rowIndex) =>
+export default ({board, selectUnit, theState, makeMove}) => board.map((cells, rowIndex) =>
   <div key={rowIndex}>
-    {cells.map((symbol, cellIndex) => renderCel(makeMove, rowIndex, cellIndex,symbol,false, theState, makeMove3))}
+    {cells.map((symbol, cellIndex) => renderCel(selectUnit, rowIndex, cellIndex,symbol,false, theState, makeMove))}
   </div>
 )
