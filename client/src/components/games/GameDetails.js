@@ -49,7 +49,7 @@ class GameDetails extends PureComponent {
         (row, rowIndex) => row.map((cell, cellIndex) => {
           if (rowIndex === toRow && cellIndex === toCell) return game.turn
           else if (rowIndex === this.state.theRow 
-            && cellIndex === this.state.theCell) return cell
+            && cellIndex === this.state.theCell) return null
           else return cell
         })
         )
