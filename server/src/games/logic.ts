@@ -6,9 +6,9 @@ export class IsBoard implements ValidatorConstraintInterface {
 
   validate(board: Board) {
     const symbols = [ 'x', 'o', null ]
-    return board.length === 3 &&
+    return board.length === 6 &&
       board.every(row =>
-        row.length === 3 &&
+        row.length === 6 &&
         row.every(symbol => symbols.includes(symbol))
       )
   }
@@ -34,7 +34,7 @@ export const calculateWinner = (board: Board): Symbol | null =>
   board
     .concat(
       // vertical winner
-      [0, 1, 2].map(n => board.map(row => row[n])) as Row[]
+      [0, 1, 2, 3, 4, 5].map(n => board.map(row => row[n])) as Row[]
     )
     .concat(
       [
