@@ -67,7 +67,7 @@ export default class GameController {
       type: 'UPDATE_GAME',
       payload: await Game.findOneById(game.id)
     })
-
+    
     return player
   }
 
@@ -111,7 +111,6 @@ export default class GameController {
       type: 'UPDATE_GAME',
       payload: game
     })
-
     return game
   }
 
