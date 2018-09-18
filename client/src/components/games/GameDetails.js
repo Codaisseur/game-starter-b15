@@ -24,15 +24,23 @@ class GameDetails extends PureComponent {
   joinGame = () => this.props.joinGame(this.props.game.id)
   
   selectUnit = (toRow, toCell) => {
+    const {game} = this.props
+    if (game.board[toRow][toCell] === null) {
+      return 
+    } else if (game.board[toRow][toCell] != game.turn) {
+      return
+    } else if (game.board[toRow][toCell] == game.turn)
     return this.setState({
       theRow: toRow, 
       theCell: toCell
-    })
+    }),
+    console.log(this.state)
   }
 
   makeMove = (toRow, toCell) => {
     const {game, updateGame} = this.props
 
+    if (game.board[toRow][toCell] === null) {
     const board = game.board.map(
       (row, rowIndex) => row.map((cell, cellIndex) => {
         if (rowIndex === toRow && cellIndex === toCell) return game.turn
@@ -45,7 +53,9 @@ class GameDetails extends PureComponent {
     this.setState({
       theRow: 0, 
       theCell: 0
-    })
+    })} else {
+      return console.log('Cant move a unit there')
+    }
   }
 
 
