@@ -2,13 +2,16 @@ import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, M
 import User from '../users/entity'
 
 export type Symbol = 'x' | 'o'
+
 export type Row = [ Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null ]
 export type Board = [ Row, Row, Row, Row, Row, Row]
 
 type Status = 'pending' | 'started' | 'finished'
 
 const emptyRow: Row = [null, null, null, null, null, null]
-const emptyBoard: Board = [ emptyRow, emptyRow, emptyRow, emptyRow, emptyRow, emptyRow ]
+const row1: Row = [null, 'x', null, null, null, 'o']
+const row2: Row = [null, null, 'o', null, 'x', null]
+const emptyBoard: Board = [ emptyRow, row1, emptyRow, emptyRow, row2, emptyRow ]
 
 @Entity()
 export class Game extends BaseEntity {
