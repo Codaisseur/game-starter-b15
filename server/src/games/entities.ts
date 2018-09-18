@@ -3,6 +3,25 @@ import User from '../users/entity'
 
 export type Symbol = 'x' | 'o'
 
+// export type Unit = {
+//   name: 'x',
+//   team: 'red',
+//   Health: 10,
+//   type: 'infantry' | 'vehicle'
+// } | {
+//   name: 'y',
+//   team: 'blue',
+//   Health: 10,
+//   type: 'infantry' | 'vehicle'
+// }
+
+// const baseUnit: Unit = {
+//   name: 'x',
+//   team: 'red',
+//   Health: 10,
+//   type: 'infantry'
+// }
+
 export type Row = [ Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null ]
 export type Board = [ Row, Row, Row, Row, Row, Row]
 
@@ -22,7 +41,7 @@ export class Game extends BaseEntity {
   @Column('json', {default: emptyBoard})
   board: Board
 
-  @Column('char', {length:1, default: 'x'})
+  @Column('char', {default: 'x'})
   turn: Symbol
 
   @Column('char', {length:1, nullable: true})
