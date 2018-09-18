@@ -10,8 +10,8 @@ import './GameDetails.css'
 
 class GameDetails extends PureComponent {
   state = {
-    rowIndex: 0,
-    cellIndex: 0
+    theRow: 0,
+    theCell: 0
   }
 
   componentWillMount() {
@@ -22,38 +22,40 @@ class GameDetails extends PureComponent {
   }
 
   joinGame = () => this.props.joinGame(this.props.game.id)
-
-  makeMove3 = (toRow, toCell) => {
-    const {game, updateGame} = this.props
-
-    const board = game.board.map(
-      (row, rowIndex) => row.map((cell, cellIndex) => {
-        if (rowIndex === toRow && cellIndex === toCell) return game.turn
-        else return cell
-      })
-    )
-    console.log(this.state)
-  }
-
-  makeMove2 = (toRow, toCell) => {
-    this.setState({
-      rowIndex: toRow, 
-      cellIndex: toCell
-    }, function() { this.makeMove3(this.state.rowIndex, this.state.cellIndex) }
-    )
-  }
-
+ 
+  // makeMove = (toRow, toCell) => {
+  //   const {game, updateGame} = this.props
+    
+  //   const board = game.board.map(
+  //     (row, rowIndex) => row.map((cell, cellIndex) => {
+  //       if (rowIndex === toRow && cellIndex === toCell && cell === game.turn) return game.turn
+  //       else return cell
+  //     })
+  //     )
+  //     this.makeMove2(toRow, toCell)
+  //   }
+  
   makeMove = (toRow, toCell) => {
-    const {game, updateGame} = this.props
-
-    const board = game.board.map(
-      (row, rowIndex) => row.map((cell, cellIndex) => {
-        if (rowIndex === toRow && cellIndex === toCell && cell === game.turn) return this.makeMove2(toRow, toCell)
-        else return cell
-      })
-    )
+    return this.setState({
+      theRow: toRow, 
+      theCell: toCell
+    })
   }
 
+    makeMove3 = (toRow, toCell) => {
+      const {game, updateGame} = this.props
+  
+      const board = game.board.map(
+        (row, rowIndex) => row.map((cell, cellIndex) => {
+          if (rowIndex === toRow && cellIndex === toCell) return game.turn
+          else if (rowIndex === this.state.theRow 
+            && cellIndex === this.state.theCell) return cell
+          else return cell
+        })
+        )
+      updateGame(game.id, board)
+      console.log(board)
+    }
 
 
   render() {
@@ -98,7 +100,7 @@ class GameDetails extends PureComponent {
 
       {
         game.status !== 'pending' &&
-        <Board object={this.state} board={game.board} makeMove={this.makeMove} makeMove3={this.makeMove3}/>
+        <Board board={game.board} makeMove={this.makeMove} theState={this.state} makeMove3={this.makeMove3}/>
       }
     </Paper>)
   }
