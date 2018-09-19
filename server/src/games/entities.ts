@@ -18,7 +18,7 @@ export type Unit = {
 
 // const baseUnit: Unit = {
 //   name: 'x',
-//   team: 'red',
+//   team: 'r',
 //   Health: 10,
 //   type: 'infantry'
 // }

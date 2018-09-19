@@ -6,12 +6,18 @@ import {getUsers} from '../../actions/users'
 import {userId} from '../../jwt'
 import Paper from 'material-ui/Paper'
 import Board from './Board'
+import Menu from './Menu'
 import './GameDetails.css'
 
 class GameDetails extends PureComponent {
   state = {
     theRow: -1,
-    theCell: -1
+    theCell: -1,
+    showMenu: false
+  }
+
+  toggleMenu = function() {
+    this.setState({ showMenu: !this.state.showMenu });
   }
 
   componentWillMount() {
@@ -60,18 +66,20 @@ class GameDetails extends PureComponent {
       || (game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn && game.board[toRow][toCell-1] !== undefined)
       )
       {
-        return console.log('cell next to you has an enemy')
+        return this.toggleMenu() &&
+        console.log('cell next to you has an enemy')
       }
-
+          // Check Y co-ordinates
     else if (toRow === 0) {
       if  (
         (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
         ) 
         {
+          return  this.toggleMenu() &&
           console.log('row below you has an enemy')
         } 
       else {
-        return console.log('No enemy in the vicinity')
+        console.log('No enemy in the vicinity')
         }
       } 
 
@@ -80,19 +88,21 @@ class GameDetails extends PureComponent {
         (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn) 
       )
       {
+        return this.toggleMenu(),
         console.log('row above you has an enemy')
       } 
       else {
-        return console.log('No enemy in the vicinity')
+        console.log('No enemy in the vicinity')
       }
     }
     
-
     else if (toRow !== 5 && toRow !== 0) {
       if (
         (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn) 
       || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn) 
-      ) {
+      ) 
+      {
+        return this.toggleMenu() &&
         console.log('row above or below you has an enemy')
       } else {
         return console.log('No enemy in the vicinity')
@@ -122,11 +132,14 @@ class GameDetails extends PureComponent {
       <h1>Game #{game.id}</h1>
 
       <p>Status: {game.status}</p>
+      <Menu showMenu={this.state.showMenu}/>
 
       {
         game.status === 'started' &&
         player && player.symbol === game.turn &&
-        <div>It's your turn!</div>
+        <div>
+          It's your turn!
+        </div>
       }
 
       {
