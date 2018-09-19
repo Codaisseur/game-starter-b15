@@ -64,7 +64,7 @@ export default class GameController {
     }).save()
 
     io.emit('action', {
-      type: 'UPDATE_GAME',
+      type: 'UPDATE_GAME1',
       payload: await Game.findOneById(game.id)
     })
     
@@ -76,7 +76,7 @@ export default class GameController {
   // http://restcookbook.com/HTTP%20Methods/idempotency/
   // try to fire the same requests twice, see what happens
   @Patch('/games/:id([0-9]+)')
-  async updateGame(
+  async updateGame1(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
     @Body() update: GameUpdate
@@ -101,6 +101,45 @@ export default class GameController {
     else if (finished(update.board)) {
       game.status = 'finished'
     }
+    // Change players turn 
+    // 
+    // else {
+    //   game.turn = player.symbol === 'red' ? 'blue' : 'red'
+    // }
+    game.board = update.board
+    await game.save()
+    
+    io.emit('action', {
+      type: 'UPDATE_GAME1',
+      payload: game
+    })
+    return game
+  }
+
+  @Authorized()
+  @Patch('/games/:id([0-9]+)/update')
+  async updateGame2(
+    @CurrentUser() user: User,
+    @Param('id') gameId: number,
+    @Body() update: GameUpdate
+  ) {
+    const game = await Game.findOneById(gameId)
+    if (!game) throw new NotFoundError(`Game does not exist`)
+
+    const player = await Player.findOne({ user, game })
+
+    if (!player) throw new ForbiddenError(`You are not part of this game`)
+    if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
+    if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
+
+    const winner = calculateWinner(update.board)
+    if (winner) {
+      game.winner = winner
+      game.status = 'finished'
+    }
+    else if (finished(update.board)) {
+      game.status = 'finished'
+    }
     else {
       game.turn = player.symbol === 'red' ? 'blue' : 'red'
     }
@@ -108,11 +147,12 @@ export default class GameController {
     await game.save()
     
     io.emit('action', {
-      type: 'UPDATE_GAME',
+      type: 'UPDATE_GAME2',
       payload: game
     })
     return game
   }
+
 
   @Authorized()
   @Get('/games/:id([0-9]+)')
