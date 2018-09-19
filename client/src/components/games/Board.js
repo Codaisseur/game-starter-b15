@@ -1,21 +1,22 @@
 import React from 'react'
 import './Board.css'
+
 const renderCel = (selectUnit, rowIndex, cellIndex, symbol, hasTurn, theState, makeMove) => {
-  if(symbol) { 
-  return (
-    <button
-      className="board-tile"
-      disabled={hasTurn}
-      onClick={() => {
-        if (theState.theRow < 0){
-        return selectUnit(rowIndex, cellIndex) } else {
-        return makeMove(rowIndex, cellIndex)
+  if(symbol !== null) {
+    return (
+      <button
+        className="board-tile"
+        disabled={hasTurn}
+        onClick={() => {
+          if (theState.theRow < 0){
+          return selectUnit(rowIndex, cellIndex) } else {
+          return makeMove(rowIndex, cellIndex)
+          }
         }
-      }
-      } 
-      key={`${rowIndex}-${cellIndex}`}
-    >{symbol.name}</button>
-  )
+        } 
+        key={`${rowIndex}-${cellIndex}`}
+      >{symbol.name}</button>
+    )
   } else {
     return (
       <button
