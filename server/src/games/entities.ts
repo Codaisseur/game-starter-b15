@@ -2,6 +2,7 @@ import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, M
 import User from '../users/entity'
 
 export type Symbol = 'red' | 'blue'
+export type Base = 'HQ'
 
 // export type Team = 'red' | 'blue'
 export type Unit = {
@@ -18,7 +19,7 @@ export type Unit = {
 
 // const baseUnit: Unit = {
 //   name: 'x',
-//   team: 'red',
+//   team: 'r',
 //   Health: 10,
 //   type: 'infantry'
 // }
@@ -27,14 +28,15 @@ export type blue = 'blue'
 export type Units = [Unit, Unit, Unit]
 export type UnitsRedBlue = {red:[red,red,red], blue:[blue,blue,blue]}
 
-export type Row = [ Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null ]
+export type Row = [ Symbol | Base | null, Symbol | Base | null, Symbol | Base | null, 
+                  Symbol | Base | null, Symbol | Base | null, Symbol | Base | null ]
 export type Board = [ Row, Row, Row, Row, Row, Row]
 
 type Status = 'pending' | 'started' | 'finished'
 
 const emptyRow: Row = [null, null, null, null, null, null]
 const row1: Row = ['red', null, null, null, null, 'blue']
-const row2: Row = [null, 'red', null, null, 'blue', null]
+const row2: Row = ['HQ', 'red', null, null, 'blue', 'HQ']
 const emptyBoard: Board = [ emptyRow, row1, row2, row1, emptyRow, emptyRow ]
 
 @Entity()
