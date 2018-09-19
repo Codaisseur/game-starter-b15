@@ -23,9 +23,8 @@ const updateGameSuccess = () => ({
   type: UPDATE_GAME_SUCCESS
 })
 
-const joinGameSuccess = (currentGame) => ({
-  type: JOIN_GAME_SUCCESS,
-  payload: currentGame
+const joinGameSuccess = () => ({
+  type: JOIN_GAME_SUCCESS
 })
 
 
@@ -46,26 +45,14 @@ export const getGames = () => (dispatch, getState) => {
 export const joinGame = (gameId) => (dispatch, getState) => {
   const state = getState()
   const jwt = state.currentUser.jwt
-  const units = { red: [], blue: []}
-  state.games[gameId].board.map((row) => {
-        row.map((cell) => {
-          if(cell == 'red') {
-            units.red.push(cell)
-          }
-          if(cell == 'blue') {
-            units.blue.push(cell)
-          }
-        })
-  })
-  console.log("units")
-  console.log(units)
+
 
   if (isExpired(jwt)) return dispatch(logout())
 
   request
     .post(`${baseUrl}/games/${gameId}/players`)
     .set('Authorization', `Bearer ${jwt}`)
-    .then(_ => dispatch(joinGameSuccess(units)))
+    .then(_ => dispatch(joinGameSuccess()))
     .catch(err => console.error(err))
 }
 
@@ -78,7 +65,9 @@ export const createGame = () => (dispatch, getState) => {
   request
     .post(`${baseUrl}/games`)
     .set('Authorization', `Bearer ${jwt}`)
-    .then(result => dispatch(addGame(result.body)))
+    .then(result => {
+      dispatch(addGame(result.body))
+    })
     .catch(err => console.error(err))
 }
 

@@ -27,6 +27,8 @@ export default class GameController {
   ) {
     const entity = await Game.create().save()
 
+    console.log(entity)
+
     await Player.create({
       game: entity, 
       user,
@@ -34,6 +36,8 @@ export default class GameController {
     }).save()
 
     const game = await Game.findOneById(entity.id)
+
+    console.log(game)
 
     io.emit('action', {
       type: 'ADD_GAME',
@@ -53,8 +57,24 @@ export default class GameController {
     const game = await Game.findOneById(gameId)
     if (!game) throw new BadRequestError(`Game does not exist`)
     if (game.status !== 'pending') throw new BadRequestError(`Game is already started`)
+    console.log(game)
+    const units:any = {red:[], blue:[]}
+      
+          game.board.map((row) => {
+                row.map((cell) => {
+                  if(cell == 'red') {
+                    units.red.push(cell)
+                  }
+                  if(cell == 'blue') {
+                    units.blue.push(cell)
+                  }
+                })
+          })
 
+      const newGame = {...game, units}
+      console.log(newGame)
     game.status = 'started'
+    game.units = units
     await game.save()
 
     const player = await Player.create({
