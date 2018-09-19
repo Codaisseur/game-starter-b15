@@ -8,7 +8,7 @@ const renderCel = (selectUnit, rowIndex, cellIndex, symbol, hasTurn, theState, m
       className="board-tile"
       disabled={hasTurn}
       onClick={() => {
-        if (theState.theRow < 1){
+        if (theState.theRow < 0){
         return selectUnit(rowIndex, cellIndex) } else {
         return makeMove(rowIndex, cellIndex)
         }

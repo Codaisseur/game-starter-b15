@@ -10,8 +10,8 @@ import './GameDetails.css'
 
 class GameDetails extends PureComponent {
   state = {
-    theRow: 0,
-    theCell: 0
+    theRow: -1,
+    theCell: -1
   }
 
   componentWillMount() {
@@ -50,18 +50,37 @@ class GameDetails extends PureComponent {
       )
     updateGame(game.id, board)
     this.setState({
-      theRow: 0, 
-      theCell: 0
+      theRow: -1, 
+      theCell: -1
     }) 
-    if ((game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn)
-      || (game.board[toRow][toCell-1] != undefined && game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn)
-      || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
-      || (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn)
-      ){
-      console.log('Fire?')
+            
+    if (    // X co-ordinate right
+      (game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn)
+            // X co-ordinate left
+      || (game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn)
+      )
+      {
+        return console.log('cell next to you has an enemy')
+      }
+
+    else if (toRow !== 5) {
+      if  (
+        (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
+        ) 
+        {
+          return console.log('row below you has an enemy')
+        }
+      } 
+    else if (toRow !== 0) 
+      if (
+        (game.board[toRow-1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn) 
+      )
+      {
+        return console.log('row above you has an enemy')
+      } 
     }
-  } else {
-      return console.log('Cant move a unit there')
+    else {
+      return console.log('No enemy in the vicinity')
     }
   }
 
@@ -126,3 +145,5 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameDetails)
+
+

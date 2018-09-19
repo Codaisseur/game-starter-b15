@@ -1,19 +1,20 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
 import User from '../users/entity'
 
-export type Symbol = 'x' | 'o'
+export type Symbol = 'r' | 'b'
 
-// export type Unit = {
-//   name: 'x',
-//   team: 'red',
-//   Health: 10,
-//   type: 'infantry' | 'vehicle'
-// } | {
-//   name: 'y',
-//   team: 'blue',
-//   Health: 10,
-//   type: 'infantry' | 'vehicle'
-// }
+// export type Team = 'red' | 'blue'
+export type Unit = {
+  name: 'x',
+  team: 'r',
+  Health: 10,
+  type: 'infantry' | 'vehicle'
+} | {
+  name: 'y',
+  team: 'b',
+  Health: 10,
+  type: 'infantry' | 'vehicle'
+}
 
 // const baseUnit: Unit = {
 //   name: 'x',
@@ -28,9 +29,9 @@ export type Board = [ Row, Row, Row, Row, Row, Row]
 type Status = 'pending' | 'started' | 'finished'
 
 const emptyRow: Row = [null, null, null, null, null, null]
-const row1: Row = [null, 'x', null, null, null, 'o']
-const row2: Row = [null, null, 'o', null, 'x', null]
-const emptyBoard: Board = [ emptyRow, row1, emptyRow, emptyRow, row2, emptyRow ]
+const row1: Row = ['r', null, null, null, null, 'b']
+const row2: Row = [null, 'r', null, null, 'b', null]
+const emptyBoard: Board = [ emptyRow, row1, row2, row1, emptyRow, emptyRow ]
 
 @Entity()
 export class Game extends BaseEntity {
@@ -41,10 +42,10 @@ export class Game extends BaseEntity {
   @Column('json', {default: emptyBoard})
   board: Board
 
-  @Column('char', {default: 'x'})
+  @Column('char', {default: 'r'})
   turn: Symbol
 
-  @Column('char', {length:1, nullable: true})
+  @Column('char', {nullable: true})
   winner: Symbol
 
   @Column('text', {default: 'pending'})
@@ -72,6 +73,6 @@ export class Player extends BaseEntity {
   @Column()
   userId: number
 
-  @Column('char', {length: 1})
+  @Column('char')
   symbol: Symbol
 }
