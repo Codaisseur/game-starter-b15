@@ -6,14 +6,14 @@ export type Base = 'HQ'
 
 // export type Team = 'red' | 'blue'
 export type Unit = {
-  name: 'x',
-  team: 'r',
-  Health: 10,
+  name: 'john',
+  team: 'red',
+  health: 10,
   type: 'infantry' | 'vehicle'
 } | {
-  name: 'y',
-  team: 'b',
-  Health: 10,
+  name: 'jane',
+  team: 'blue',
+  health: 10,
   type: 'infantry' | 'vehicle'
 }
 
@@ -23,6 +23,10 @@ export type Unit = {
 //   Health: 10,
 //   type: 'infantry'
 // }
+export type red = 'red'
+export type blue = 'blue'
+export type Units = [Unit, Unit, Unit]
+export type UnitsRedBlue = {red:[red,red,red], blue:[blue,blue,blue]}
 
 export type Row = [ Symbol | Base | null, Symbol | Base | null, Symbol | Base | null, 
                   Symbol | Base | null, Symbol | Base | null, Symbol | Base | null ]
@@ -43,6 +47,9 @@ export class Game extends BaseEntity {
 
   @Column('json', {default: emptyBoard})
   board: Board
+
+  @Column('json', {nullable:true})
+  units: UnitsRedBlue
 
   @Column('text', {default: 'red'})
   turn: Symbol

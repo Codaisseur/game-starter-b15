@@ -3,6 +3,12 @@ import './Board.css'
 
 
 const renderCel = (selectUnit, rowIndex, cellIndex, symbol, hasTurn, theState, makeMove) => {
+  // if(symbol == 'red') {
+  //   this.setState({red: symbol})
+  // }
+  // if(symbol == 'blue') {
+  //   this.setState({blue: symbol})
+  // }
   return (
     <button
       className="board-tile"
