@@ -18,7 +18,7 @@ export type Unit = {
 
 // const baseUnit: Unit = {
 //   name: 'x',
-//   team: 'red',
+//   team: 'r',
 //   Health: 10,
 //   type: 'infantry'
 // }
@@ -31,7 +31,14 @@ type Status = 'pending' | 'started' | 'finished'
 const emptyRow: Row = [null, null, null, null, null, null]
 const row1: Row = ['r', null, null, null, null, 'b']
 const row2: Row = [null, 'r', null, null, 'b', null]
-const emptyBoard: Board = [ emptyRow, row1, row2, row1, emptyRow, emptyRow ]
+const emptyBoard: Board = [ 
+  emptyRow, 
+  row1, 
+  row2, 
+  row1, 
+  emptyRow, 
+  emptyRow 
+]
 
 @Entity()
 export class Game extends BaseEntity {
