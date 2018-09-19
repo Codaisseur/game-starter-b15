@@ -1,4 +1,4 @@
-import {ADD_GAME, UPDATE_GAME, UPDATE_GAMES} from '../actions/games'
+import {ADD_GAME, UPDATE_GAME, UPDATE_GAMES, JOIN_GAME_SUCCESS} from '../actions/games'
 import {USER_LOGOUT} from '../actions/users'
 
 /*

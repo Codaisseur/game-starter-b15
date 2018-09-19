@@ -11,7 +11,9 @@ import './GameDetails.css'
 class GameDetails extends PureComponent {
   state = {
     theRow: -1,
-    theCell: -1
+    theCell: -1,
+    red: [],
+    blue: []
   }
 
   componentWillMount() {
@@ -19,7 +21,25 @@ class GameDetails extends PureComponent {
       if (this.props.game === null) this.props.getGames()
       if (this.props.users === null) this.props.getUsers()
     }
+    if(!this.props.game) console.log("noo")
+    if(this.props.game) console.log("see")
   }
+
+ 
+
+  
+  // createUnits() {
+  //   game.board.map((row) => {
+  //     row.map((cell) => {
+  //       if(cell == 'red') {
+  //         this.setState({red: [...this.state.red, cell]})
+  //       }
+  //       if(cell == 'blue') {
+  //         this.setState({blue: [...this.state.blue, cell]})
+  //       }
+  //     })
+  //   })
+  // }
 
   joinGame = () => this.props.joinGame(this.props.game.id)
   
