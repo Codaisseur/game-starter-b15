@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
-import {getGames, joinGame, updateGame} from '../../actions/games'
+import {getGames, joinGame, updateGame1, updateGame2} from '../../actions/games'
 import {getUsers} from '../../actions/users'
 import {userId} from '../../jwt'
 import Paper from 'material-ui/Paper'
@@ -13,6 +13,8 @@ class GameDetails extends PureComponent {
   state = {
     theRow: -1,
     theCell: -1,
+    gameId: 0,
+    board: '',
     showMenu: false
   }
 
@@ -29,6 +31,7 @@ class GameDetails extends PureComponent {
 
   joinGame = () => this.props.joinGame(this.props.game.id)
   
+  // Select a unit
   selectUnit = (toRow, toCell) => {
     const {game} = this.props
     if (game.board[toRow][toCell] === null) {
@@ -42,8 +45,9 @@ class GameDetails extends PureComponent {
     })
   }
 
+  // Make a move with the indexes from 'selectUnit()'
   makeMove = (toRow, toCell) => {
-    const {game, updateGame} = this.props
+    const {game, updateGame1} = this.props
 
     if (game.board[toRow][toCell] === null) {
     const board = game.board.map(
@@ -54,19 +58,24 @@ class GameDetails extends PureComponent {
         else return cell
       })
       )
-    updateGame(game.id, board)
+      // Do a 'soft' update of the game, not ending the turn
+    updateGame1(game.id, board)
     this.setState({
       theRow: -1, 
       theCell: -1
     }) 
             
-    if (    // X co-ordinate right
+    if (    // Check X co-ordinate right
       (game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn && game.board[toRow][toCell+1] !== undefined)
-            // X co-ordinate left
+            // Check X co-ordinate left
       || (game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn && game.board[toRow][toCell-1] !== undefined)
       )
       {
-        return this.toggleMenu() &&
+        this.toggleMenu()
+        this.setState({
+            gameId: game.id,
+            board
+          })
         console.log('cell next to you has an enemy')
       }
           // Check Y co-ordinates
@@ -75,11 +84,17 @@ class GameDetails extends PureComponent {
         (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
         ) 
         {
-          return  this.toggleMenu() &&
+          // Toggle display the menu and set the state of the gameId and board
+          // The state is passed on as a prop to Menu so that it can update the game after the turn is ended
+          this.toggleMenu()
+          this.setState({
+            gameId: game.id,
+            board
+          })
           console.log('row below you has an enemy')
         } 
       else {
-        console.log('No enemy in the vicinity')
+        console.log('No enemy in the vicinity', this.state)
         }
       } 
 
@@ -88,11 +103,15 @@ class GameDetails extends PureComponent {
         (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn) 
       )
       {
-        return this.toggleMenu(),
+        this.toggleMenu()
+        this.setState({
+          gameId: game.id,
+          board
+        })
         console.log('row above you has an enemy')
       } 
       else {
-        console.log('No enemy in the vicinity')
+        console.log('No enemy in the vicinity', this.state)
       }
     }
     
@@ -102,10 +121,14 @@ class GameDetails extends PureComponent {
       || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn) 
       ) 
       {
-        return this.toggleMenu() &&
+        this.toggleMenu()
+        this.setState({
+          gameId: game.id,
+          board
+        })
         console.log('row above or below you has an enemy')
       } else {
-        return console.log('No enemy in the vicinity')
+        return console.log('No enemy in the vicinity', this.state)
       }
     }
   }
@@ -132,7 +155,7 @@ class GameDetails extends PureComponent {
       <h1>Game #{game.id}</h1>
 
       <p>Status: {game.status}</p>
-      <Menu showMenu={this.state.showMenu}/>
+      <Menu showMenu={this.state.showMenu} board={this.state.board} gameId={this.state.gameId} endTurn={this.props.updateGame2}/>
 
       {
         game.status === 'started' &&
@@ -171,7 +194,7 @@ const mapStateToProps = (state, props) => ({
 })
 
 const mapDispatchToProps = {
-  getGames, getUsers, joinGame, updateGame
+  getGames, getUsers, joinGame, updateGame1, updateGame2
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameDetails)
