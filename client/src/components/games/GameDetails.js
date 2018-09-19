@@ -58,13 +58,14 @@ class GameDetails extends PureComponent {
     const {game} = this.props
     if (game.board[toRow][toCell] === null) {
       return 
-    } else if (game.board[toRow][toCell] !== game.turn) {
+    } else if (game.board[toRow][toCell].team !== game.turn) {
       return
-    } else if (game.board[toRow][toCell] === game.turn)
-    return this.setState({
-      theRow: toRow, 
-      theCell: toCell
-    })
+    } else if (game.board[toRow][toCell].team === game.turn) {
+      return this.setState({
+        theRow: toRow, 
+        theCell: toCell
+      })
+    }
   }
 
   // Make a move with the indexes from 'selectUnit()'
@@ -74,7 +75,7 @@ class GameDetails extends PureComponent {
     if (game.board[toRow][toCell] === null) {
     const board = game.board.map(
       (row, rowIndex) => row.map((cell, cellIndex) => {
-        if (rowIndex === toRow && cellIndex === toCell) return game.turn
+        if (rowIndex === toRow && cellIndex === toCell) return game.board[this.state.theRow][this.state.theCell]
         else if (rowIndex === this.state.theRow 
           && cellIndex === this.state.theCell) return null
         else return cell

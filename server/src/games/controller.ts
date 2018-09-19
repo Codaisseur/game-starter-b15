@@ -4,15 +4,15 @@ import {
 } from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player, Board } from './entities'
-import {IsBoard, calculateWinner, finished} from './logic'
-import { Validate } from 'class-validator'
+import {finished} from './logic'
+// import { Validate } from 'class-validator'
 import {io} from '../index'
 
 class GameUpdate {
 
-  @Validate(IsBoard, {
-    message: 'Not a valid board'
-  })
+  // @Validate(IsBoard, {
+  //   message: 'Not a valid board'
+  // })
   board: Board
 }
 
@@ -76,7 +76,46 @@ export default class GameController {
   // http://restcookbook.com/HTTP%20Methods/idempotency/
   // try to fire the same requests twice, see what happens
   @Patch('/games/:id([0-9]+)')
-  async updateGame(
+  async updateGame1(
+    @CurrentUser() user: User,
+    @Param('id') gameId: number,
+    @Body() update: GameUpdate
+  ) {
+    const game = await Game.findOneById(gameId)
+    if (!game) throw new NotFoundError(`Game does not exist`)
+
+    const player = await Player.findOne({ user, game })
+
+    if (!player) throw new ForbiddenError(`You are not part of this game`)
+    if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
+    if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
+    // if (!isValidTransition(player.symbol, game.board, update.board)) {
+    //   throw new BadRequestError(`Invalid move`)
+    // }    
+
+    // const winner = calculateWinner(update.board)
+    // if (winner) {
+    //   game.winner = winner
+    //   game.status = 'finished'
+    // }
+    else if (finished(update.board)) {
+      game.status = 'finished'
+    }
+    // else {
+    //   game.turn = player.symbol === 'red' ? 'blue' : 'red'
+    // }
+    game.board = update.board
+    await game.save()
+    
+    io.emit('action', {
+      type: 'UPDATE_GAME',
+      payload: game
+    })
+    return game
+  }
+  @Authorized()
+  @Patch('/games/:id([0-9]+)/update')
+  async updateGame2(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
     @Body() update: GameUpdate
