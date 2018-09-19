@@ -55,34 +55,51 @@ class GameDetails extends PureComponent {
     }) 
             
     if (    // X co-ordinate right
-      (game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn)
+      (game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn && game.board[toRow][toCell+1] !== undefined)
             // X co-ordinate left
-      || (game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn)
+      || (game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn && game.board[toRow][toCell-1] !== undefined)
       )
       {
         return console.log('cell next to you has an enemy')
       }
 
-    else if (toRow !== 5) {
+    else if (toRow === 0) {
       if  (
         (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
         ) 
         {
-          return console.log('row below you has an enemy')
+          console.log('row below you has an enemy')
+        } 
+      else {
+        return console.log('No enemy in the vicinity')
         }
       } 
-    else if (toRow !== 0) 
+
+    else if (toRow === 5) {
       if (
-        (game.board[toRow-1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn) 
+        (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn) 
       )
       {
-        return console.log('row above you has an enemy')
+        console.log('row above you has an enemy')
       } 
+      else {
+        return console.log('No enemy in the vicinity')
+      }
     }
-    else {
-      return console.log('No enemy in the vicinity')
+    
+
+    else if (toRow !== 5 && toRow !== 0) {
+      if (
+        (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn) 
+      || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn) 
+      ) {
+        console.log('row above or below you has an enemy')
+      } else {
+        return console.log('No enemy in the vicinity')
+      }
     }
   }
+}
 
 
   render() {
