@@ -30,7 +30,7 @@ export default class GameController {
     await Player.create({
       game: entity, 
       user,
-      symbol: 'x'
+      symbol: 'r'
     }).save()
 
     const game = await Game.findOneById(entity.id)
@@ -60,7 +60,7 @@ export default class GameController {
     const player = await Player.create({
       game, 
       user,
-      symbol: 'o'
+      symbol: 'b'
     }).save()
 
     io.emit('action', {
@@ -102,7 +102,7 @@ export default class GameController {
       game.status = 'finished'
     }
     else {
-      game.turn = player.symbol === 'x' ? 'o' : 'x'
+      game.turn = player.symbol === 'r' ? 'b' : 'r'
     }
     game.board = update.board
     await game.save()

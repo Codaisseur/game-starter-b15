@@ -10,8 +10,8 @@ import './GameDetails.css'
 
 class GameDetails extends PureComponent {
   state = {
-    theRow: 0,
-    theCell: 0
+    theRow: -1,
+    theCell: -1
   }
 
   componentWillMount() {
@@ -50,18 +50,18 @@ class GameDetails extends PureComponent {
       )
     updateGame(game.id, board)
     this.setState({
-      theRow: 0, 
-      theCell: 0
+      theRow: -1, 
+      theCell: -1
     }) 
-    if ((game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn)
-      || (game.board[toRow][toCell-1] != undefined && game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn)
-      || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
-      || (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn)
-      ){
-      console.log('Fire?')
-    }
-  } else {
-      return console.log('Cant move a unit there')
+  //   if ((game.board[toRow][toCell+1] !== null && game.board[toRow][toCell+1] !== game.turn)
+  //     || (game.board[toRow][toCell-1] !== null && game.board[toRow][toCell-1] !== game.turn)
+  //     || (game.board[toRow+1][toCell] !== null && game.board[toRow+1][toCell] !== game.turn)
+  //     || (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn)
+  //     ){
+  //     console.log(toRow, toCell)
+  //   }
+  // } else {
+      console.log('Cant move a unit there')
     }
   }
 
