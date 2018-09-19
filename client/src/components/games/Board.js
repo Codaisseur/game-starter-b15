@@ -1,14 +1,7 @@
 import React from 'react'
 import './Board.css'
-
-
 const renderCel = (selectUnit, rowIndex, cellIndex, symbol, hasTurn, theState, makeMove) => {
-  // if(symbol == 'red') {
-  //   this.setState({red: symbol})
-  // }
-  // if(symbol == 'blue') {
-  //   this.setState({blue: symbol})
-  // }
+  if(symbol) { 
   return (
     <button
       className="board-tile"
@@ -21,8 +14,24 @@ const renderCel = (selectUnit, rowIndex, cellIndex, symbol, hasTurn, theState, m
       }
       } 
       key={`${rowIndex}-${cellIndex}`}
-    >{symbol || '-'}</button>
+    >{symbol.name}</button>
   )
+  } else {
+    return (
+      <button
+        className="board-tile"
+        disabled={hasTurn}
+        onClick={() => {
+          if (theState.theRow < 0){
+          return selectUnit(rowIndex, cellIndex) } else {
+          return makeMove(rowIndex, cellIndex)
+          }
+        }
+        } 
+        key={`${rowIndex}-${cellIndex}`}
+      >{'-'}</button>
+    )
+  }
 }
 
 export default ({board, selectUnit, theState, makeMove}) => board.map((cells, rowIndex) =>
