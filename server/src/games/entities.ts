@@ -9,12 +9,12 @@ export type Unit = {
   name: 'john',
   team: 'red',
   health: 10,
-  type: 'infantry' | 'vehicle'
+  type: 'infantry' | 'vehicle' | 'bazooka'
 } | {
   name: 'jane',
   team: 'blue',
   health: 10,
-  type: 'infantry' | 'vehicle'
+  type: 'infantry' | 'vehicle' | 'bazooka'
 }
 
 // const baseUnit: Unit = {
@@ -23,20 +23,18 @@ export type Unit = {
 //   Health: 10,
 //   type: 'infantry'
 // }
-export type red = 'red'
-export type blue = 'blue'
 export type Units = [Unit, Unit, Unit]
-export type UnitsRedBlue = {red:[red,red,red], blue:[blue,blue,blue]}
+export type UnitsRedBlue = {red:Units, blue:Units}
 
-export type Row = [ Symbol | Base | null, Symbol | Base | null, Symbol | Base | null, 
-                  Symbol | Base | null, Symbol | Base | null, Symbol | Base | null ]
+export type Row = [ Unit | Base | null, Unit | Base | null, Unit | Base | null, 
+  Unit | Base | null, Unit | Base | null, Unit | Base | null ]
 export type Board = [ Row, Row, Row, Row, Row, Row]
 
 type Status = 'pending' | 'started' | 'finished'
 
 const emptyRow: Row = [null, null, null, null, null, null]
-const row1: Row = ['red', null, null, null, null, 'blue']
-const row2: Row = ['HQ', 'red', null, null, 'blue', 'HQ']
+const row1: Row = [{name: 'john',team: 'red',health: 10,type: 'infantry'}, null, null, null, null, {name: 'jane',team: 'blue',health: 10,type: 'infantry'}]
+const row2: Row = ['HQ', {name: 'john',team: 'red',health: 10,type: 'infantry'}, null, null, {name: 'jane',team: 'blue',health: 10,type: 'infantry'}, 'HQ']
 const emptyBoard: Board = [ emptyRow, row1, row2, row1, emptyRow, emptyRow ]
 
 @Entity()
@@ -47,9 +45,6 @@ export class Game extends BaseEntity {
 
   @Column('json', {default: emptyBoard})
   board: Board
-
-  @Column('json', {nullable:true})
-  units: UnitsRedBlue
 
   @Column('text', {default: 'red'})
   turn: Symbol
