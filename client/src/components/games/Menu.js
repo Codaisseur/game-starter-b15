@@ -9,8 +9,13 @@ export default class Menu extends React.Component {
             <div>
                 {this.props.showMenu && 
                 <div>
-                <button>Fire</button>
-                <button onClick={() => this.props.endTurn(this.props.gameId, this.props.board)}>End turn</button>
+                    <button>Fire</button>
+                    <button onClick={() => (
+                        this.props.toggleMenu(),
+                        this.props.endTurn(this.props.gameId, this.props.board) 
+                        )}>
+                        End turn
+                    </button>
                 </div>}
             </div>
         )
