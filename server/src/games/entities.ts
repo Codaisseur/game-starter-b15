@@ -1,7 +1,7 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
 import User from '../users/entity'
 
-export type Symbol = 'r' | 'b'
+export type Symbol = 'red' | 'blue'
 
 // export type Team = 'red' | 'blue'
 export type Unit = {
@@ -29,8 +29,8 @@ export type Board = [ Row, Row, Row, Row, Row, Row]
 type Status = 'pending' | 'started' | 'finished'
 
 const emptyRow: Row = [null, null, null, null, null, null]
-const row1: Row = ['r', null, null, null, null, 'b']
-const row2: Row = [null, 'r', null, null, 'b', null]
+const row1: Row = ['red', null, null, null, null, 'blue']
+const row2: Row = [null, 'red', null, null, 'blue', null]
 const emptyBoard: Board = [ emptyRow, row1, row2, row1, emptyRow, emptyRow ]
 
 @Entity()
@@ -42,7 +42,7 @@ export class Game extends BaseEntity {
   @Column('json', {default: emptyBoard})
   board: Board
 
-  @Column('char', {default: 'r'})
+  @Column('text', {default: 'red'})
   turn: Symbol
 
   @Column('char', {nullable: true})
@@ -73,6 +73,6 @@ export class Player extends BaseEntity {
   @Column()
   userId: number
 
-  @Column('char')
+  @Column('text')
   symbol: Symbol
 }
