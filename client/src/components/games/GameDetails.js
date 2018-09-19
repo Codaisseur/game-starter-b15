@@ -10,12 +10,16 @@ import Menu from './Menu'
 import './GameDetails.css'
 
 class GameDetails extends PureComponent {
-  state = {
-    theRow: -1,
-    theCell: -1,
-    gameId: 0,
-    board: '',
-    showMenu: false
+  constructor(props) {
+    super(props)
+    this.state = {
+      theRow: -1,
+      theCell: -1,
+      gameId: 0,
+      board: '',
+      showMenu: false
+    }
+    this.toggleMenu = this.toggleMenu.bind(this)
   }
 
   toggleMenu = function() {
@@ -85,7 +89,7 @@ class GameDetails extends PureComponent {
         ) 
         {
           // Toggle display the menu and set the state of the gameId and board
-          // The state is passed on as a prop to Menu so that it can update the game after the turn is ended
+          // The state is passed on as a prop to <Menu/> so that it can update the game after the turn is ended
           this.toggleMenu()
           this.setState({
             gameId: game.id,
@@ -101,7 +105,7 @@ class GameDetails extends PureComponent {
     else if (toRow === 5) {
       if (
         (game.board[toRow-1][toCell] !== null && game.board[toRow-1][toCell] !== game.turn) 
-      )
+      ) 
       {
         this.toggleMenu()
         this.setState({
@@ -155,7 +159,7 @@ class GameDetails extends PureComponent {
       <h1>Game #{game.id}</h1>
 
       <p>Status: {game.status}</p>
-      <Menu showMenu={this.state.showMenu} board={this.state.board} gameId={this.state.gameId} endTurn={this.props.updateGame2}/>
+      <Menu showMenu={this.state.showMenu} board={this.state.board} gameId={this.state.gameId} endTurn={this.props.updateGame2} toggleMenu={this.toggleMenu}/>
 
       {
         game.status === 'started' &&
