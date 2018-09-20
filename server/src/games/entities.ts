@@ -1,14 +1,41 @@
 import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
 import User from '../users/entity'
 
-export type Symbol = 'x' | 'o'
-export type Row = [ Symbol | null, Symbol | null, Symbol | null ]
-export type Board = [ Row, Row, Row ]
+export type Symbol = 'red' | 'blue'
+export type Base = {name:'HQ', health:20, team:'red' | 'blue'}
+
+// export type Team = 'red' | 'blue'
+export type Unit = {
+  name: 'john',
+  team: 'red',
+  health: 10,
+  type: 'infantry' | 'vehicle' | 'bazooka'
+} | {
+  name: 'jane',
+  team: 'blue',
+  health: 10,
+  type: 'infantry' | 'vehicle' | 'bazooka'
+}
+
+// const baseUnit: Unit = {
+//   name: 'x',
+//   team: 'r',
+//   Health: 10,
+//   type: 'infantry'
+// }
+export type Units = [Unit, Unit, Unit]
+export type UnitsRedBlue = {red:Units, blue:Units}
+
+export type Row = [ Unit | Base | null, Unit | Base | null, Unit | Base | null, 
+  Unit | Base | null, Unit | Base | null, Unit | Base | null ]
+export type Board = [ Row, Row, Row, Row, Row, Row]
 
 type Status = 'pending' | 'started' | 'finished'
 
-const emptyRow: Row = [null, null, null]
-const emptyBoard: Board = [ emptyRow, emptyRow, emptyRow ]
+const emptyRow: Row = [null, null, null, null, null, null]
+const row1: Row = [{name: 'john',team: 'red',health: 10,type: 'infantry'}, null, null, null, null, {name: 'jane',team: 'blue',health: 10,type: 'infantry'}]
+const row2: Row = [{name:'HQ', health:20, team:'red'}, {name: 'john',team: 'red',health: 10,type: 'infantry'}, null, null, {name: 'jane',team: 'blue',health: 10,type: 'infantry'}, {name:'HQ', health:20, team:'blue'}]
+const emptyBoard: Board = [ emptyRow, row1, row2, row1, emptyRow, emptyRow ]
 
 @Entity()
 export class Game extends BaseEntity {
@@ -19,10 +46,10 @@ export class Game extends BaseEntity {
   @Column('json', {default: emptyBoard})
   board: Board
 
-  @Column('char', {length:1, default: 'x'})
+  @Column('text', {default: 'red'})
   turn: Symbol
 
-  @Column('char', {length:1, nullable: true})
+  @Column('char', {nullable: true})
   winner: Symbol
 
   @Column('text', {default: 'pending'})
@@ -50,6 +77,6 @@ export class Player extends BaseEntity {
   @Column()
   userId: number
 
-  @Column('char', {length: 1})
+  @Column('text')
   symbol: Symbol
 }
