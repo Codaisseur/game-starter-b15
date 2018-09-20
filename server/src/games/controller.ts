@@ -64,7 +64,7 @@ export default class GameController {
     }).save()
 
     io.emit('action', {
-      type: 'UPDATE_GAME',
+      type: 'UPDATE_GAME2',
       payload: await Game.findOneById(game.id)
     })
     
@@ -108,7 +108,7 @@ export default class GameController {
     await game.save()
     
     io.emit('action', {
-      type: 'UPDATE_GAME',
+      type: 'UPDATE_GAME1',
       payload: game
     })
     return game
@@ -147,7 +147,7 @@ export default class GameController {
     await game.save()
     
     io.emit('action', {
-      type: 'UPDATE_GAME',
+      type: 'UPDATE_GAME2',
       payload: game
     })
     return game
