@@ -1,20 +1,29 @@
-import { 
-  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, NotFoundError, ForbiddenError, Get, 
-  Body, Patch 
+import {
+  JsonController, Authorized, CurrentUser, Post, Param, BadRequestError, HttpCode, NotFoundError, ForbiddenError, Get,
+ /* Body,*/ Patch
 } from 'routing-controllers'
 import User from '../users/entity'
-import { Game, Player, Board } from './entities'
-import {IsBoard, isValidTransition, calculateWinner, finished} from './logic'
-import { Validate } from 'class-validator'
-import {io} from '../index'
-
+import { Game, Player, Color } from './entities'
+import { /*IsSecretCode,*/ isValidTransition,/* calculateWinner, finished, setSecretCode*/ } from './logic'
+// import { Validate } from 'class-validator'
+import { io } from '../index'
+/*
 class GameUpdate {
-
-  @Validate(IsBoard, {
-    message: 'Not a valid board'
+  @Validate(IsSecretCode, {
+    message: 'Not a valid secret code'
   })
-  board: Board
+  secretCode: Array<Color>
 }
+*/
+
+const randomColor = (): Color => {
+  const colors: Array<Color> = ['#4286f4', '#fcf953', '#ce792f']
+  let index = Math.floor(Math.random() * colors.length)
+  let newColor: Color = colors[index]
+  console.log('random', newColor)
+  return newColor
+}
+
 
 @JsonController()
 export default class GameController {
@@ -25,22 +34,30 @@ export default class GameController {
   async createGame(
     @CurrentUser() user: User
   ) {
-    const entity = await Game.create().save()
 
-    await Player.create({
-      game: entity, 
-      user,
-      symbol: 'x'
+    console.log(user)
+    const entity = await Game.create({
+      secretCode: [randomColor(), randomColor(), randomColor()],
     }).save()
 
-    const game = await Game.findOneById(entity.id)
+    await Player.create({
+      game: entity,
+      user,
+    }).save()
+    console.log(Player)
 
+    const game = await Game.findOneById(entity.id)
+    if (!game) {
+      throw new Error
+    }
+
+    const { secretCode, ...gameWithoutSecretCode } = game
     io.emit('action', {
       type: 'ADD_GAME',
-      payload: game
+      payload: gameWithoutSecretCode
     })
 
-    return game
+    return gameWithoutSecretCode
   }
 
   @Authorized()
@@ -58,9 +75,8 @@ export default class GameController {
     await game.save()
 
     const player = await Player.create({
-      game, 
+      game,
       user,
-      // symbol: 'o'
     }).save()
 
     io.emit('action', {
@@ -71,15 +87,25 @@ export default class GameController {
     return player
   }
 
+  //PATCH => TBD
+
   @Authorized()
   // the reason that we're using patch here is because this request is not idempotent
   // http://restcookbook.com/HTTP%20Methods/idempotency/
   // try to fire the same requests twice, see what happens
   @Patch('/games/:id([0-9]+)')
+  //Patch trimite o mutare 
+  //tb sa verifici:
+  //care dinte cei doi jucatori e
+  //e jucatorul catre trimite mutarea e cel curent (true)
+  //e mutarea una buna? valida?
+  //apoi fa mutarea => adauga culori in playerInput; schimba playerOneTurn 
+  //to it's negated (f to t and t to f)
+  //compara codurile si trimite rezultatul
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-    @Body() update: GameUpdate
+    // @Body() update: GameUpdate
   ) {
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
@@ -88,25 +114,25 @@ export default class GameController {
 
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
-    if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
-    if (!isValidTransition(player.symbol, game.board, update.board)) {
+    if (game.playerOneTurn !== false) throw new BadRequestError(`It's not your turn`)
+    if (!isValidTransition(player.playerGuess)) {
       throw new BadRequestError(`Invalid move`)
-    }    
-
-    const winner = calculateWinner(update.board)
-    if (winner) {
-      game.winner = winner
-      game.status = 'finished'
     }
-    else if (finished(update.board)) {
-      game.status = 'finished'
-    }
-    else {
-      game.turn = player.symbol === 'x' ? 'o' : 'x'
-    }
-    game.board = update.board
-    await game.save()
-    
+    /*
+        const winner = calculateWinner(update.board)
+        if (winner) {
+          game.winner = winner
+          game.status = 'finished'
+        }
+        else if (finished(update.board)) {
+          game.status = 'finished'
+        }
+        else {
+          game.turn = player.symbol === 'x' ? 'o' : 'x'
+        }
+        game.board = update.board
+        await game.save()
+        */
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
@@ -114,6 +140,8 @@ export default class GameController {
 
     return game
   }
+
+
 
   @Authorized()
   @Get('/games/:id([0-9]+)')
