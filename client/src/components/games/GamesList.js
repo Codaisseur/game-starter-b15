@@ -3,10 +3,12 @@ import {getGames, createGame} from '../../actions/games'
 import {getUsers} from '../../actions/users'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
-import Button from 'material-ui/Button'
-import Paper from 'material-ui/Paper'
-import Card, { CardActions, CardContent } from 'material-ui/Card'
-import Typography from 'material-ui/Typography'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import Typography from '@material-ui/core/Typography'
 import './GamesList.css'
 
 class GamesList extends PureComponent {
@@ -26,7 +28,7 @@ class GamesList extends PureComponent {
           This game is played by&nbsp;
           {
             game.players
-              .map(player => users[player.userId].firstName)
+              .map(player => users[player.user.id].firstName)
               .join(' and ')
           }
         </Typography>

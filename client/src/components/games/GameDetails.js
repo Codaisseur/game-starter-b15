@@ -4,7 +4,7 @@ import {Redirect} from 'react-router-dom'
 import {getGames, joinGame, updateGame} from '../../actions/games'
 import {getUsers} from '../../actions/users'
 import {userId} from '../../jwt'
-import Paper from 'material-ui/Paper'
+import Paper from '@material-ui/core/Paper'
 import Board from './Board'
 import './GameDetails.css'
 
@@ -43,11 +43,11 @@ class GameDetails extends PureComponent {
     if (game === null || users === null) return 'Loading...'
     if (!game) return 'Not found'
 
-    const player = game.players.find(p => p.userId === userId)
+    const player = game.players.find(p => p.user.id === userId)
 
     const winner = game.players
       .filter(p => p.symbol === game.winner)
-      .map(p => p.userId)[0]
+      .map(p => p.user.id)[0]
 
     return (<Paper className="outer-paper">
       <h1>Game #{game.id}</h1>
@@ -62,7 +62,7 @@ class GameDetails extends PureComponent {
 
       {
         game.status === 'pending' &&
-        game.players.map(p => p.userId).indexOf(userId) === -1 &&
+        game.players.map(p => p.user.id).indexOf(userId) === -1 &&
         <button onClick={this.joinGame}>Join Game</button>
       }
 
