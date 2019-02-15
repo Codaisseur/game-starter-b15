@@ -6,7 +6,7 @@ import SocketIO from './socketio'
 
 const reducer = combineReducers(reducers)
 
-const devTools = window.devToolsExtension ? window.devToolsExtension() : f => f
+const devTools = window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
 
 const socket = new SocketIO()
 
