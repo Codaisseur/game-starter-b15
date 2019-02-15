@@ -1,6 +1,7 @@
 {
   "name": "game-starter-b15-server",
   "version": "1.0.0",
+  "engine": "11",
   "main": "target/index.js",
   "private": true,
   "scripts": {
@@ -18,7 +19,7 @@
     "@types/koa-router": "^7.0.27",
     "@types/mocha": "^2.2.48",
     "@types/socket.io": "^1.4.32",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "^3.0.4",
     "jsonwebtoken": "^8.2.0",
     "kcors": "^2.2.1",
     "koa": "^2.5.0",
@@ -32,6 +33,7 @@
     "socketio-jwt-auth": "^0.0.6",
     "ts-node": "^5.0.1",
     "typeorm": "0.1.19",
-    "typescript": "^2.7.2"
+    "typescript": "^2.7.2",
+    "uws": "^99.0.0"
   }
 }
