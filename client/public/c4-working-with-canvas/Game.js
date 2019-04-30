@@ -1,38 +1,26 @@
-import { ConnectFour } from "./ConnectFour";
-import { Ball, Player } from "./elements";
-import { players } from "./elements";
+import { ConnectFour } from "./GameLogic.js";
+import { Ball, Player } from "./Elements";
+import { players } from "./Elements";
 
 class Game {
-  canvas: HTMLCanvasElement;
-  c: CanvasRenderingContext2D;
-  connectFour: ConnectFour;
-  columnHeight: number[];
-  ballsInColumn: Ball[][];
-  gameOver: boolean;
-
-  readonly span: number = 50;
-  readonly boardAreaMarginLeft: number;
-  readonly boardAreaMarginTop: number;
-  readonly boardHeight: number;
-  readonly boardWidth: number;
-
   constructor() {
     this.connectFour = new ConnectFour();
     this.boardHeight = this.span * this.connectFour.HEIGHT;
     this.boardWidth = this.span * this.connectFour.WIDTH;
     this.boardAreaMarginLeft = 30;
     this.boardAreaMarginTop = 10;
-    this.canvas = <HTMLCanvasElement>document.getElementById("cnvs");
+    this.canvas = document.getElementById("cnvs");
+    // <HTMLCanvasElement>
     this.c = this.canvas.getContext("2d");
     this.reset();
   }
 
-  start(): void {
+  start() {
     this.drawGrid();
     this.initEventsListeners();
   }
 
-  reset(): void {
+  reset() {
     this.columnHeight = [];
     this.ballsInColumn = [];
     this.gameOver = false;
@@ -44,7 +32,7 @@ class Game {
     this.drawLastFinalState();
   }
 
-  initEventsListeners = (): void => {
+  initEventsListeners = () => {
     let connectFour = this.connectFour;
     this.canvas.addEventListener("click", e => {
       let [row, col, isMouseInsideBoard] = this.getMousePosition(e);
@@ -53,7 +41,7 @@ class Game {
         this.connectFour.isPlayable(col) &&
         !this.gameOver
       ) {
-        this.drawDropingBall(col);
+        this.drawDroppingBall(col);
         this.connectFour.move(col);
       }
     });
@@ -79,12 +67,12 @@ class Game {
     });
   };
 
-  getMousePosition = (e): [number, number, boolean] => {
+  getMousePosition = e => {
     let col = (e.offsetX - this.boardAreaMarginLeft) / this.span;
     col = Math.floor(col);
     let row = (e.offsetY - this.boardAreaMarginTop) / this.span;
     row = Math.floor(row);
-    let isMouseInsideBoard: boolean =
+    let isMouseInsideBoard =
       col >= 0 &&
       col < this.connectFour.WIDTH &&
       row >= 0 &&
@@ -92,20 +80,20 @@ class Game {
     return [row, col, isMouseInsideBoard];
   };
 
-  drawGrid(): void {
-    let numHorizentalLines = this.connectFour.HEIGHT + 1;
+  drawGrid() {
+    let numHorizontalLines = this.connectFour.HEIGHT + 1;
     let numVerticalLines = this.connectFour.WIDTH + 1;
-    let lengthHorizentalLine = this.connectFour.WIDTH * this.span;
+    let lengthHorizontalLine = this.connectFour.WIDTH * this.span;
     let lengthVerticalLine = this.connectFour.HEIGHT * this.span;
 
     let offsetX = this.boardAreaMarginLeft;
     let offsetY = this.boardAreaMarginTop;
 
-    for (let i = 0; i < numHorizentalLines; i++) {
+    for (let i = 0; i < numHorizontalLines; i++) {
       this.c.beginPath();
       let y = offsetY + this.span * i;
       let x1 = offsetX;
-      let x2 = offsetX + lengthHorizentalLine;
+      let x2 = offsetX + lengthHorizontalLine;
       this.c.moveTo(x1, y);
       this.c.lineTo(x2, y);
       this.c.stroke();
@@ -121,15 +109,15 @@ class Game {
     }
   }
 
-  drawLastFinalState = (): void => {
+  drawLastFinalState = () => {
     this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawGrid();
     this.drawExistingBalls();
   };
 
-  drawDropingBall = (col: number): void => {
-    let dy: number = 30;
-    let halfSpan: number = this.span / 2;
+  drawDroppingBall = col => {
+    let dy = 30; // downward velocity of ball
+    let halfSpan = this.span / 2;
     let radius = halfSpan - 3;
     let x = this.boardAreaMarginLeft + (2 * col + 1) * halfSpan;
     let y = this.boardAreaMarginTop + halfSpan;
@@ -154,7 +142,7 @@ class Game {
     this.columnHeight[col]--;
   };
 
-  drawExistingBalls = (): void => {
+  drawExistingBalls = () => {
     for (let index = 0; index < this.connectFour.WIDTH; index++) {
       let balls = this.ballsInColumn[index];
       for (let ballIndex = 0; ballIndex < balls.length; ballIndex++) {
@@ -163,20 +151,15 @@ class Game {
     }
   };
 
-  drawNewBall = (
-    player: Player,
-    x: number,
-    y: number,
-    radius: number
-  ): void => {
+  drawNewBall = (player, x, y, radius) => {
     let ball = new Ball(player, x, y, radius);
     ball.draw(this.c);
   };
 
-  message(divName: string, mesg: string): void {
+  message(divName, mesg) {
     const elt = document.getElementById(divName);
     elt.innerText = mesg;
   }
 }
 
-export = Game;
+export { Game };

@@ -1,26 +1,18 @@
 import Long from "long";
-import { Player } from "./elements";
+import { Player } from "./Elements";
+import { players } from "./Elements";
 
-/* To read Gilian:
- * http://stackoverflow.com/questions/7044670/how-to-determine-game-end-in-tic-tac-toe/7046415#7046415
- * https://github.com/qu1j0t3/fhourstones/blob/master/Connect4.java
- */
 class ConnectFour {
-  readonly HEIGHT: number = 6;
-  readonly WIDTH: number = 7;
-  readonly SIZE: number = this.WIDTH * this.HEIGHT;
-  readonly H1: number = this.HEIGHT + 1;
-  readonly SIZE1: number = this.WIDTH * this.H1;
-  readonly H2: number = this.HEIGHT + 2;
-  readonly ALL1: Long = Long.UONE.shl(this.SIZE1).sub(Long.UONE);
-  readonly COL1: number = (1 << this.H1) - 1;
-  readonly BOTTOM: Long = this.ALL1.div(Long.fromInt(this.COL1, true));
-  readonly TOP: Long = this.BOTTOM.shl(this.HEIGHT);
-
-  private color: Long[];
-  private height: number[];
-  private moves: number[];
-  private npiles: number;
+  HEIGHT = 6;
+  WIDTH = 7;
+  SIZE = this.WIDTH * this.HEIGHT;
+  H1 = this.HEIGHT + 1;
+  SIZE1 = this.WIDTH * this.H1;
+  H2 = this.HEIGHT + 2;
+  ALL1 = Long.UONE.shl(this.SIZE1).sub(Long.UONE);
+  COL1 = (1 << this.H1) - 1;
+  BOTTOM = this.ALL1.div(Long.fromInt(this.COL1, true));
+  TOP = this.BOTTOM.shl(this.HEIGHT);
 
   constructor() {
     this.npiles = 0;
@@ -30,7 +22,7 @@ class ConnectFour {
     this.reset();
   }
 
-  reset(): void {
+  reset() {
     this.npiles = 0;
     this.color[0] = this.color[1] = Long.UZERO;
     this.moves = [];
@@ -39,28 +31,28 @@ class ConnectFour {
     }
   }
 
-  getCurrentPlayerId = (): number => {
+  getCurrentPlayerId = () => {
     return this.npiles & 1;
   };
 
-  getBoard = (player: Player) => {
+  getBoard = player => {
     return this.color[player.id];
   };
 
-  private isLegal(newboard: Long): boolean {
+  isLegal(newboard) {
     return newboard.and(this.TOP).eq(0);
   }
 
-  isPlayable(col: number): boolean {
+  isPlayable(col) {
     return this.isLegal(
       this.color[this.npiles & 1].or(Long.UONE.shl(this.height[col]))
     );
   }
 
-  private hasWon(newboard: Long): boolean {
-    let y: Long = newboard.and(newboard.shr(this.HEIGHT));
+  hasWon(newboard) {
+    let y = newboard.and(newboard.shr(this.HEIGHT));
     if (y.and(y.shr(2 * this.HEIGHT)).neq(Long.UZERO)) {
-      return true; // check diagnal \
+      return true; // check diagonal \ rtl
     }
 
     y = newboard.and(newboard.shr(this.H1));
@@ -70,18 +62,18 @@ class ConnectFour {
 
     y = newboard.and(newboard.shr(this.H2));
     if (y.and(y.shr(2 * this.H2)).neq(Long.UZERO)) {
-      return true; // check diagnal /
+      return true; // check diagonal / ltr
     }
 
     y = newboard.and(newboard.shr(1));
     return y.and(y.shr(2)).neq(Long.UZERO); // check vertical |
   }
 
-  isLegalHasWon(newboard: Long): boolean {
+  isLegalHasWon(newboard) {
     return this.isLegal(newboard) && this.hasWon(newboard);
   }
 
-  move(col: number): void {
+  move(col) {
     this.color[this.npiles & 1] = this.color[this.npiles & 1].xor(
       Long.UONE.shl(this.height[col])
     );
