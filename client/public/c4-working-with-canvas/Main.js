@@ -1,4 +1,4 @@
-import Game = require("./Game");
+import Game from "./Game";
 
 (function() {
   let game = new Game();

@@ -1,15 +1,5 @@
 class Player {
-  id: number;
-  name: string;
-  color: string;
-  columnHighlightingColor: string;
-
-  constructor(
-    id: number,
-    name: string,
-    color: string,
-    columnHighlightingColor: string
-  ) {
+  constructor(id, name, color, columnHighlightingColor) {
     this.id = id;
     this.name = name;
     this.color = color;
@@ -18,21 +8,14 @@ class Player {
 }
 
 class Ball {
-  x: number;
-  y: number;
-  radius: number;
-  color: string;
-
-  readonly pi: number = Math.PI;
-
-  constructor(player: Player, x: number, y: number, radius: number) {
+  constructor(player, x, y, radius) {
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.color = player.color;
   }
 
-  draw = (context: CanvasRenderingContext2D) => {
+  draw = context => {
     context.beginPath();
     context.arc(this.x, this.y, this.radius, 0, 2 * this.pi);
     context.fillStyle = this.color;
