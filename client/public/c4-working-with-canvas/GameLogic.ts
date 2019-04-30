@@ -1,4 +1,4 @@
-import Long = require("../node_modules/long");
+import Long from "long";
 import { Player } from "./elements";
 
 /* To read Gilian:

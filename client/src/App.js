@@ -5,7 +5,7 @@ import SignupPage from "./components/signup/SignupPage";
 import GamesList from "./components/games/GamesList";
 import GameDetails from "./components/games/GameDetails";
 import LogoutPage from "./components/logout/LogoutPage";
-import ConnectFour from "./components/ConnectFour/ConnectFourContainer";
+import ConnectFourContainer from "./components/ConnectFour/ConnectFourContainer";
 import "./App.css";
 import TopBar from "./components/layout/TopBar";
 
@@ -25,7 +25,11 @@ class App extends Component {
             <Route exact path="/login" component={LoginPage} />
             <Route exact path="/logout" component={LogoutPage} />
             <Route exact path="/signup" component={SignupPage} />
-            <Route exact path="/pingponggeorge" component={ConnectFour} />
+            <Route
+              exact
+              path="/pingponggeorge"
+              component={ConnectFourContainer}
+            />
             <Route exact path="/games" component={GamesList} />
             <Route exact path="/games/:id" component={GameDetails} />
             <Route exact path="/" render={() => <Redirect to="/games" />} />

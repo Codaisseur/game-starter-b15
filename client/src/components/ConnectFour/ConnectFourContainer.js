@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import ConnectFour from "./ConnectFour";
+import ConnectFourInstance from "./ConnectFourInstance";
 
 export default class ConnectFourContainer extends Component {
   state = {};
 
   render() {
-    console.log(this.state);
-    if (!this.state.dogTypes) return "Loading...";
+    // console.log(this.state);
+    // if (!this.state) return "Loading...";
     return (
       <div>
-        <ConnectFour />
+        <ConnectFourInstance />
       </div>
     );
   }
