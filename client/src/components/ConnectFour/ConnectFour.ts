@@ -1,5 +1,5 @@
 import Long = require("../node_modules/long");
-import { Player } from "./Elements";
+import { Player } from "./elements";
 
 /* To read Gilian:
  * http://stackoverflow.com/questions/7044670/how-to-determine-game-end-in-tic-tac-toe/7046415#7046415
