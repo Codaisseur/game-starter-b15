@@ -10,6 +10,7 @@ import {
 import User from "../users/entity";
 
 export type Symbol = "x" | "o";
+
 export type Row = [
   Symbol | null,
   Symbol | null,
@@ -26,6 +27,7 @@ type Status = "pending" | "started" | "finished";
 
 const emptyRow: Row = [null, null, null, null, null, null, null];
 const emptyBoard: Board = [emptyRow, emptyRow, emptyRow, emptyRow, emptyRow, emptyRow];
+
 
 @Entity()
 export class Game extends BaseEntity {
