@@ -28,7 +28,7 @@ class GameDetails extends PureComponent {
         else return cell
       })
     )
-    updateGame(game.id, board)
+    updateGame(game.id, toRow, toCell)
   }
 
 
