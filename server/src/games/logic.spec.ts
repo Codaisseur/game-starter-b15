@@ -1,57 +1,59 @@
-import "mocha";
+// import "mocha";
 import { equal } from "assert";
 import { calculateWinner } from "./logic";
 import { Board } from "./entities";
 
-// , isValidTransition, finished
+// // , isValidTransition, finished
 
 describe("calculateWinner()", () => {
   it("should work for a horizontal winner", () => {
+    const rowIndex = 5;
+    const colIndex = 3;
     const board: Board = [
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
-      [null, null, "o", "o", null, null, null],
-      [null, null, "o", "x", "x", "x", "x"]
+      [null, null, "o", null, null, null, null],
+      [null, null, "o", null, "x", "x", "x"]
     ];
-    equal(calculateWinner(board), "x");
+    equal(calculateWinner(board, rowIndex, colIndex, "x"), true);
   });
 
   it("should work for a vertical winner", () => {
     const board: Board = [
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, "o"],
+      [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, "o"],
       [null, null, null, null, null, null, "o"],
       [null, "x", "x", null, null, "x", "o"]
     ];
-    equal(calculateWinner(board), "o");
+    equal(calculateWinner(board, 2, 6, "o"), true);
   });
 
   it("should work for a diagonal winner [rtl]", () => {
     const board: Board = [
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
-      [null, null, null, null, null, "x", null],
+      [null, null, null, null, null, null, null],
       [null, null, null, null, "x", "o", null],
       [null, null, null, "x", "x", "o", "o"],
       [null, null, "x", "o", "o", "o", "x"]
     ];
-    equal(calculateWinner(board), "x");
+    equal(calculateWinner(board, 2, 5, "x"), true);
   });
 
   it("should work for a diagonal winner [ltr]", () => {
     const board: Board = [
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
-      [null, "o", null, null, null, null, null],
+      [null, null, null, null, null, null, null],
       [null, "x", "o", null, null, null, null],
       ["x", "x", "o", "o", null, null, null],
       ["o", "x", "x", "x", "o", null, null]
     ];
-    equal(calculateWinner(board), "o");
+    equal(calculateWinner(board, 2, 1, "o"), true);
   });
 
   // it("should work when there is no winner", () => {
