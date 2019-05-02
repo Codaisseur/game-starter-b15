@@ -12,14 +12,6 @@ table {
   border-spacing: 0px 0px;
 }
 
-/* this is the Board border (for each row) */
-
-.boardHolderDiv {
-  display: flex;
-  flex-wrap: nowrap;
-  background-color: rgb(109, 132, 236);
-}
-
 .button {
   background-color: #ec0000;
   color: rgb(169, 198, 252);
@@ -44,8 +36,8 @@ table {
 }
 
 .cell {
-  height: 100px;
-  width: 100px;
+  height: 70px;
+  width: 70px;
   background-color: #a2d2ff;
   display: flex;
   flex-direction: row;
@@ -81,32 +73,26 @@ table {
 }
 
 .white {
-  height: 100px;
-  width: 100px;
+  height: 60px;
+  width: 60px;
   background-color: #FFF;
   border-radius: 100px;
-  margin: 5px 5px 5px 5px;
-  box-shadow: inset 4px 5px 6px #444;
 }
 
 .red {
-  height: 100px;
-  width: 100px;
+  height: 60px;
+  width: 60px;
   background-color: red;
   border-radius: 100px;
-  margin: 5px 5px 5px 5px;
   transition: background-color 0.5s;
-  box-shadow: inset 4px 5px 6px #222;
 }
 
 .yellow {
-  height: 100px;
-  width: 100px;
+  height: 60px;
+  width: 60px;
   background-color: yellow;
   border-radius: 100px;
-  margin: 5px 5px 5px 5px;
   transition: background-color 0.5s;
-  box-shadow: inset 4px 5px 6px #222;
 }
 
 .playingField {
@@ -114,7 +100,6 @@ table {
   flex-wrap: nowrap;
 }
 
-.row {
-  /* background-color: rgb(126, 210, 243); */
-  background-color: red;
+.boardHolderDiv {
+  background-color: aquamarine;
 }
