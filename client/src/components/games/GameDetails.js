@@ -1,11 +1,12 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import Board from "./Board";
+import Paper from "@material-ui/core/Paper";
 import { getGames, joinGame, updateGame } from "../../actions/games";
 import { getUsers } from "../../actions/users";
 import { userId } from "../../jwt";
-import Paper from "@material-ui/core/Paper";
-import Board from "./Board";
+// const { AudioModule } = NativeModules;
 import "./GameDetails.css";
 
 class GameDetails extends PureComponent {
@@ -23,8 +24,10 @@ class GameDetails extends PureComponent {
 
     const board = game.board.map((row, rowIndex) =>
       row.map((cell, cellIndex) => {
-        if (rowIndex === toRow && cellIndex === toCell) return game.turn;
-        else return cell;
+        if (rowIndex === toRow && cellIndex === toCell) {
+          console.log("event test returning game.turn", game.turn);
+          return game.turn;
+        } else return cell;
       })
     );
     updateGame(game.id, toRow, toCell);
@@ -50,24 +53,27 @@ class GameDetails extends PureComponent {
 
         <div className="gameStatus">Status: {game.status}</div>
 
-        {game.status === "started" && player && player.symbol === game.turn && (
-          <div>It's your turn!</div>
-        )}
-
         {game.status === "pending" &&
           game.players.map(p => p.userId).indexOf(userId) === -1 && (
             <button onClick={this.joinGame}>Join Game</button>
           )}
 
-        {winner && (
-          <div className="winnerMessage">
-            {users[winner].firstName} won the game!
-          </div>
-        )}
-
         {game.status !== "pending" && (
-          <div className="GameBorderDiv">
-            <Board board={game.board} makeMove={this.makeMove} />
+          <div className="GameEntireFieldDiv">
+            <div className="GameTurnDiv">
+              {game.status === "started" &&
+                player &&
+                player.symbol === game.turn && <div>It's your turn!</div>}
+              {winner && (
+                <div className="winnerMessage">
+                  {users[winner].firstName} won the game!
+                </div>
+              )}
+            </div>
+            <div className="GameBorderDiv">
+              <Board board={game.board} makeMove={this.makeMove} />
+            </div>
+            <div className="GameEmptyDiv" />
           </div>
         )}
       </div>

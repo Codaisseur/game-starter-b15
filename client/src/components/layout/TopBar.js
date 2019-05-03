@@ -26,7 +26,7 @@ const TopBar = props => {
     >
       <Toolbar>
         <Typography variant="title" color="inherit" style={{ flex: 1 }}>
-          Multiplayer Tic Tac Toe
+          [Ping Pong George Logo will come here]
         </Typography>
         {user && (
           <Button color="inherit">
@@ -65,8 +65,6 @@ const TopBar = props => {
     </AppBar>
   );
 };
-
-
 
 const mapStateToProps = state => ({
   user:
