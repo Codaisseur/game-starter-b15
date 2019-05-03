@@ -9,6 +9,10 @@
   width: 770px;
   margin: auto;
   padding: auto;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid black;
+  margin-bottom: 30px;
 }
 
 .gameStatus {

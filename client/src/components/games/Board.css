@@ -1,5 +1,5 @@
 body {
-  font-family: 'Lucida Sans Unicode';
+  font-family: "Lucida Sans Unicode";
 }
 
 h1 {
@@ -38,7 +38,7 @@ table {
 }
 
 .button:hover {
-  background-color: #50C8FF;
+  background-color: #50c8ff;
   color: #303030;
   transition: background-color 0.5s, color 0.5s;
 }
@@ -83,7 +83,7 @@ table {
 .white {
   height: 100px;
   width: 100px;
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 100px;
   margin: 5px 5px 5px 5px;
   box-shadow: inset 4px 5px 6px #444;

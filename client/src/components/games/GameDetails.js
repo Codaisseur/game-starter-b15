@@ -68,8 +68,6 @@ class GameDetails extends PureComponent {
         {game.status !== "pending" && (
           <div className="GameBorderDiv">
             <Board board={game.board} makeMove={this.makeMove} />
-            <br />
-            <br />
           </div>
         )}
       </div>
